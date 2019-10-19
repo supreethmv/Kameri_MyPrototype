@@ -1,0 +1,133 @@
+version: "3.7"
+services:
+  front-envoy:
+    build:
+      context: ./envoy
+      dockerfile: ./development/Dockerfile.dev
+    volumes:
+      - ./envoy/development/front-envoy-dev.yaml:/etc/front-envoy-dev.yaml
+    networks:
+      - envoymesh
+    expose:
+      - "80"
+      - "8001"
+    ports:
+      - "8000:80"
+      - "1883:1883"
+      - "8001:8001"
+
+  auth:
+    container_name: auth
+    restart: always
+    build:
+      context: ./backend/authservice
+      dockerfile: Dockerfile.dev
+    volumes:
+      - "./backend/authservice:/code/:cached"
+    networks:
+      envoymesh:
+        aliases:
+          - auth
+    environment:
+      - SERVICE_NAME=auth
+    expose:
+      - "5001"
+
+  # robot:
+  #   container_name: robot
+  #   restart: always
+  #   build:
+  #     context: ./backend/robotservice
+  #     dockerfile: Dockerfile.dev
+  #   volumes:
+  #     - "./backend/robotservice:/code/:cached"
+  #   networks:
+  #     envoymesh:
+  #       aliases:
+  #         - robot
+  #   environment:
+  #     - SERVICE_NAME=robot
+  #   expose:
+  #     - "5002"
+
+  # mqttservice:
+  #   container_name: mqttservice
+  #   restart: always
+  #   build:
+  #     context: ./backend/mqttservice
+  #     dockerfile: Dockerfile.dev
+  #   volumes:
+  #     - "./backend/mqttservice:/code/:cached"
+  #   networks:
+  #     envoymesh:
+  #       aliases:
+  #         - mqttservice
+  #   environment:
+  #     - SERVICE_NAME=mqttservice
+  #   expose:
+  #     - "5003"     
+
+#  deviceservice:
+#    container_name: deviceservice
+#    restart: always
+#    build:
+#      context: ./backend/deviceservice
+#      dockerfile: Dockerfile.dev
+#    volumes:
+#      - "./backend/deviceservice:/code/:cached"
+#    networks:
+#      envoymesh:
+#        aliases:
+#          - deviceservice
+#    environment:
+#      - SERVICE_NAME=deviceservice
+#    expose:
+#      - "5004"     
+
+  # hivemq:
+  #   container_name: hivemq
+  #   image: hivemq/hivemq3   
+  #   networks:
+  #     envoymesh:
+  #       aliases:
+  #         - hivemq      
+  #   ports:
+  #     - "8080:8080"
+
+  # rabbitmq:
+  #   image: "rabbitmq:3-management"
+  #   hostname: "rabbitmq"
+  #   labels:
+  #     NAME: "rabbitmq"
+  #   networks:
+  #     envoymesh:
+  #       aliases:
+  #         - rabbitmq            
+  #   volumes:
+  #     - ./rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.config
+  #   ports:
+  #     - "15672:15672"
+
+  # frontend:
+  #   container_name: frontend
+  #   restart: always
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: Dockerfile
+  #   volumes:
+  #     - ./frontend:/app:cached
+  #     - /app/node_modules
+  #   networks:
+  #     envoymesh:
+  #       aliases:
+  #         - frontend
+  #   environment:
+  #     - CHOKIDAR_USEPOLLING=true
+  #     - SERVICE_NAME=frontend
+  # ports:
+  #   - "8081:8080"
+  # depends_on:
+  #   - backend
+
+networks:
+  envoymesh: {}

@@ -1,0 +1,81 @@
+version: "3.7"
+
+services:
+  pg-authdb:
+    image: kameri/authdb:v1.1
+    deploy:
+      endpoint_mode: dnsrr    
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./authdb/init_authdb.sh:/docker-entrypoint-initdb.d/init_authdb.sh
+      - ./authdb/postgresql_authdb.conf:/etc/postgresql_authdb.conf   
+    environment:
+      - POSTGRES_DB=authdb
+      - POSTGRES_PASSWORD=auth
+      - POSTGRES_USER=auth
+    networks:
+      - net
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+    ports:
+      - "5432:5432"
+  
+  pg-robotdb:
+    image: kameri/robotdb:v1.1
+    deploy:
+      endpoint_mode: dnsrr   
+    volumes:
+      - db-data-robot:/var/lib/postgresql/data
+      - ./robotdb/init_robotdb.sh:/docker-entrypoint-initdb.d/init_robotdb.sh
+      - ./robotdb/postgresql_robotdb.conf:/etc/postgresql_robotdb.conf   
+    environment:
+      - POSTGRES_DB=robot
+      - POSTGRES_PASSWORD=robotdb
+      - POSTGRES_USER=robot
+    networks:
+      - net
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+    ports:
+      - "5433:5432"
+
+  pg-devicedb:
+    image: kameri/devicedb:v1.0
+    deploy:
+      endpoint_mode: dnsrr   
+    volumes:
+      - db-data-device:/var/lib/postgresql/data
+      - ./devicedb/init_devicedb.sh:/docker-entrypoint-initdb.d/init_devicedb.sh
+      - ./devicedb/postgresql_devicedb.conf:/etc/postgresql_devicedb.conf   
+    environment:
+      - POSTGRES_DB=devicedb
+      - POSTGRES_PASSWORD=device
+      - POSTGRES_USER=device
+    networks:
+      - net
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+    ports:
+      - "5434:5432"
+
+  visualizer:
+    image: dockersamples/visualizer:stable
+    ports:
+      - "8090:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+
+networks:
+  net:
+
+volumes:
+  db-data:
+  db-data-robot:
+  db-data-device:
+

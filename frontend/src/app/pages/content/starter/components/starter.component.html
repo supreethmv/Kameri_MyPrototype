@@ -1,0 +1,15 @@
+<nb-card>
+  <nb-card-body>
+    <strong>Current User:</strong>
+    <br><br>
+    <ng-container *ngIf="(_currentUser$ | async)?.user as user">
+      <p>uuid: {{ user.uuid }}</p>
+      <p>firstName: {{ user.first_name }}</p>
+      <p>lastName: {{ user.last_name }}</p>
+      <p>email: {{ user.email }}</p>
+      <ng-container *ngFor="let orga of (_currentUser$ | async)?.user.organisation ">
+        <p>Orgaeinheit: {{ orga.name }}</p>
+      </ng-container>
+    </ng-container>
+  </nb-card-body>
+</nb-card>

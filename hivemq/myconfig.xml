@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<hivemq xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <listeners>
+        <!-- Open to the outside world -->
+        <tcp-listener>
+            <port>1883</port>
+            <bind-address>0.0.0.0</bind-address>
+            <name>open-world-listener</name>
+        </tcp-listener>
+    </listeners>
+
+    <web-ui>
+        <enabled>true</enabled>
+    </web-ui>
+    
+</hivemq>

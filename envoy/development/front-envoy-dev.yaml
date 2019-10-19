@@ -1,0 +1,107 @@
+static_resources:
+  listeners:
+  - address:
+      socket_address:
+        address: 0.0.0.0
+        port_value: 80
+    filter_chains:
+    - filters:
+      - name: envoy.http_connection_manager
+        config:
+          codec_type: auto
+          stat_prefix: ingress_http
+          route_config:
+            name: local_route
+            virtual_hosts:
+            - name: backend
+              domains:
+              - "*"
+              routes:
+              - match:
+                  prefix: "/api/auth/"
+                route:
+                  cluster: auth  
+              - match:
+                  prefix: "/api/robot/"
+                route:
+                  cluster: robot  
+              - match:
+                  prefix: "/api/mqtt/"
+                route:
+                  cluster: mqttservice    
+              - match:
+                  prefix: "/api/device/"
+                route:
+                  cluster: deviceservice                                                                                                      
+          http_filters:
+          - name: envoy.router
+            config: {}         
+  - address:
+      socket_address:
+        protocol: TCP
+        address: 0.0.0.0
+        port_value: 1883
+    filter_chains:
+    - filters:
+      - name: envoy.tcp_proxy
+        config:
+          stat_prefix: ingress_tcp
+          cluster: hivemq         
+                    
+  clusters:
+  - name: auth
+    connect_timeout: 0.25s
+    type: strict_dns
+    lb_policy: round_robin
+    http_protocol_options: {}
+    hosts:
+    - socket_address:
+        address: auth
+        port_value: 5001    
+
+  - name: robot
+    connect_timeout: 0.25s
+    type: strict_dns
+    lb_policy: round_robin
+    http_protocol_options: {}
+    hosts:
+    - socket_address:
+        address: robot
+        port_value: 5002   
+
+  - name: mqttservice
+    connect_timeout: 0.25s
+    type: strict_dns
+    lb_policy: round_robin
+    http_protocol_options: {}
+    hosts:
+    - socket_address:
+        address: mqttservice
+        port_value: 5003  
+
+  - name: deviceservice
+    connect_timeout: 0.25s
+    type: strict_dns
+    lb_policy: round_robin
+    http_protocol_options: {}
+    hosts:
+    - socket_address:
+        address: deviceservice
+        port_value: 5004  
+
+
+  - name: hivemq
+    connect_timeout: 0.25s
+    type: strict_dns
+    lb_policy: round_robin
+    hosts:
+    - socket_address:
+        address: hivemq
+        port_value: 1883        
+        
+admin:
+  access_log_path: "/dev/null"
+  address:
+    socket_address:
+      address: 0.0.0.0
+      port_value: 8001

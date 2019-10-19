@@ -1,0 +1,75 @@
+<div class="row">
+  <div class="col-md-12">
+    <ng-container *ngIf="_connectionError">
+      <nb-alert status="danger">
+        Connection failed!
+      </nb-alert>
+    </ng-container>
+    <ng-container *ngIf="_sendSuccess">
+      <nb-alert status="success">
+        Successfully send data!
+      </nb-alert>
+    </ng-container>
+    <nb-card>
+      <nb-card-header>Robot Communication</nb-card-header>
+      <nb-card-body>
+        <form [formGroup]="robotCommandForm" (ngSubmit)="onSubmit()">
+          <div class="form-group row">
+            <label for="inputRole" class="label col-sm-3 col-form-label">Role</label>
+            <div class="col-sm-9">
+              <nb-select placeholder="Choose prefix" formControlName="prefix">
+                <nb-option value='http'>http://</nb-option>
+                <nb-option value='https'>https://</nb-option>
+              </nb-select>
+            </div>
+          </div>
+          <div class="form-group row form-control-group">
+            <label for="prexis" class="label col-sm-3 col-form-label" id="input-prefix">URL</label>
+            <div class="col-sm-9">
+              <input type="text" nbInput fullWidth id="input-prefix" placeholder="URL" formControlName="url">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="commandId" class="label col-sm-3 col-form-label">commandId</label>
+            <div class="col-sm-9">
+              <nb-select placeholder="Choose commandId" formControlName="commandId">
+                <nb-option value='1'>1</nb-option>
+                <nb-option value='2'>2</nb-option>
+                <nb-option value='3'>3</nb-option>
+              </nb-select>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="value" class="label col-sm-3 col-form-label">value</label>
+            <div class="col-sm-9">
+              <nb-select placeholder="Choose value" formControlName="value">
+                <nb-option value='0'>0</nb-option>
+                <nb-option value='0.1'>0.1</nb-option>
+                <nb-option value='0.2'>0.2</nb-option>
+                <nb-option value='0.3'>0.3</nb-option>
+                <nb-option value='0.4'>0.4</nb-option>
+                <nb-option value='0.5'>0.5</nb-option>
+                <nb-option value='0.6'>0.6</nb-option>
+                <nb-option value='0.7'>0.7</nb-option>
+                <nb-option value='0.8'>0.8</nb-option>
+                <nb-option value='0.9'>0.9</nb-option>
+                <nb-option value='1'>1</nb-option>
+
+              </nb-select>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="offset-sm-3 col-sm-9">
+              <button type="submit" [disabled]="!robotCommandForm.valid" nbButton status="primary">send command</button>
+            </div>
+          </div>
+        </form>
+      </nb-card-body>
+      <!-- <ng-container *ngIf="_userRoles$ | async as roles">
+        <tr *ngFor="let role of roles; let i=index">
+          <th scope="row">{{ role._id }}</th>
+        </tr>
+      </ng-container> -->
+    </nb-card>
+  </div>
+</div>

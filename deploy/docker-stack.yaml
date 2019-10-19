@@ -1,0 +1,123 @@
+version: '3.7'
+
+services:
+  front-envoy:
+    image: kameri/envoy:v10
+    volumes:
+      - ./envoy/front-envoy.yaml:/etc/front-envoy.yaml
+      - ./envoy/fullchain.pem:/etc/fullchain.pem
+      - ./envoy/privkey.pem:/etc/privkey.pem
+    deploy:
+      replicas: 1
+      restart_policy:
+        # condition: always    
+        condition: on-failure      
+    networks:
+      - envoymesh
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8883:8883"
+      - "8001:8001"
+
+  hivemq:
+    image: kameri/hivemq:v10
+    deploy:
+      endpoint_mode: dnsrr
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    volumes:
+      - ./hivemq/myconfig.xml:/etc/myconfig.xml
+    environment:
+      - SERVICE_NAME=hivemq        
+    networks:
+      envoymesh:
+        aliases:
+          - hivemq   
+    depends_on:
+      - front-envoy  
+ 
+  authservice:
+    image: kameri/authservice:v1.1
+    deploy:
+      endpoint_mode: dnsrr
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    networks:
+      default:
+      envoymesh:
+        aliases:
+          - authservice
+    depends_on:
+      - front-envoy             
+    environment:
+      - SERVICE_NAME=authservice
+             
+  # appone:
+  #   image: kameri/appone:v20
+  #   deploy:
+  #     endpoint_mode: dnsrr
+  #     replicas: 3
+  #     restart_policy:
+  #       condition: on-failure
+  #   networks:
+  #     default:
+  #     envoymesh:
+  #       aliases:
+  #         - appone
+  #   depends_on:
+  #     - front-envoy             
+  #   environment:
+  #     - SERVICE_NAME=appone
+
+  # apptwo:
+  #   image: kameri/apptwo:v10
+  #   deploy:
+  #     endpoint_mode: dnsrr
+  #     replicas: 3
+  #     restart_policy:
+  #       condition: on-failure
+  #   networks:
+  #     envoymesh:
+  #       aliases:
+  #         - apptwo
+  #   depends_on:
+  #     - front-envoy          
+  #   environment:
+  #     - SERVICE_NAME=apptwo
+ 
+  frontend:
+    image: kameri/frontend:v41
+    volumes:
+      - /app/node_modules
+    deploy:
+      endpoint_mode: dnsrr
+      replicas: 1
+      restart_policy:
+        condition: on-failure      
+    networks:
+      envoymesh:
+        aliases:
+          - frontend  
+    environment:
+      - SERVICE_NAME=frontend
+    depends_on:
+      - authservice
+      - front-envoy
+
+  visualizer:
+    image: dockersamples/visualizer:stable
+    ports:
+      - "8090:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+
+networks:
+  envoymesh: 
+    driver: overlay
+    attachable: true

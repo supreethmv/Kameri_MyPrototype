@@ -1,0 +1,17 @@
+Flask
+Flask-MQTT
+flask_restful
+python-dotenv
+itsdangerous
+psycopg2-binary
+Flask-SQLAlchemy
+flask-marshmallow
+marshmallow-sqlalchemy
+marshmallow
+Flask-Migrate
+pika
+gunicorn
+Werkzeug
+Flask-JWT-Extended
+PyJWT
+

@@ -1,0 +1,84 @@
+<div class="row">
+  <div class="col-md-12">
+    <ng-template #loading>
+      <nb-alert status="info">
+        Loading Data ...
+      </nb-alert>
+    </ng-template>
+    <ng-container *ngIf="_allUsers$ | async as users">
+      <nb-alert status="info" *ngIf="!users.length">
+        No Data!
+      </nb-alert>
+    </ng-container>
+    <nb-card>
+      <nb-card-header>
+        Create new User:
+      </nb-card-header>
+      <nb-card-body>
+        <button nbButton size="small" status="primary" (click)="newUser()">Create</button>
+      </nb-card-body>
+    </nb-card>
+    <nb-card>
+        <nb-card-header>
+          Create new Role:
+        </nb-card-header>
+        <nb-card-body>
+          <button nbButton size="small" status="primary" (click)="newRole()">Create</button>
+        </nb-card-body>
+      </nb-card>    
+    <nb-card>
+      <nb-card-header>
+        User Overview
+      </nb-card-header>
+      <nb-card-body>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">userId</th>
+              <th scope="col">Firstname</th>
+              <th scope="col">Lastname</th>
+              <th scope="col">Username</th>
+              <th scope="col">Email</th>
+              <th scope="col">Role</th>
+              <th scope="col">Edit</th>
+              <th scope="col">Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngIf="_allUsers$ | async as users; else loading">
+              <tr *ngFor="let u of users; let i=index">
+                <th scope="row">{{ u.userId }}</th>
+                <td>{{ u.firstName }}</td>
+                <td>{{ u.lastName }}</td>
+                <td>{{ u.username }}</td>
+                <td>{{ u.email }}</td>
+                <td>{{ u.role }}</td>
+                <td><button nbButton size="tiny" status="primary" (click)="editUser(u.userId)">Edit</button></td>
+                <td><button nbButton size="tiny" status="danger" (click)="deleteUser(u.userId)">Delete</button></td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>
+<!-- <nb-card>
+  <nb-card-body>
+    Usermanagement Works!
+    <br><br>
+    <strong>All Users:</strong><br><br>
+    <ng-container *ngIf="_allUsers$ | async as users; else loading">
+      <div>Daten vorhanden</div><br>
+      <div *ngFor="let u of users; let i=index">
+        <p>{{ i }} {{ u.email }}</p>
+      </div>
+      <div *ngIf="!users.length">
+        <p>Es wurden noch keine Daten angelegt!</p>
+      </div>
+    </ng-container>
+    <ng-template #loading>
+      <p>Daten werden geladen....</p>
+    </ng-template> 
+  </nb-card-body>
+</nb-card> -->

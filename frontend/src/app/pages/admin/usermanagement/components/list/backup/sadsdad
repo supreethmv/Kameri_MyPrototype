@@ -1,0 +1,83 @@
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { Router } from  '@angular/router';
+import { UsersService } from '../../../../../awccore/auth/services/users.service';
+import { Observable } from 'rxjs';
+import { User } from '../../../../../awccore/auth/models/user';
+import { LocalDataSource } from 'ng2-smart-table';
+import { map } from 'rxjs/operators';
+
+
+@Component({
+  selector: 'ngx-usermanagement',
+  templateUrl: './usermanagement.component.html',
+  styleUrls: ['./usermanagement.component.scss']
+})
+export class UsermanagementComponent implements OnInit {
+
+  private _allUsers$: Observable<User[]>;
+
+  settings = {
+    add: {
+      addButtonContent: '<i class="nb-plus"></i>',
+      createButtonContent: '<i class="nb-checkmark"></i>',
+      cancelButtonContent: '<i class="nb-close"></i>',
+    },
+    edit: {
+      editButtonContent: '<i class="nb-edit"></i>',
+      saveButtonContent: '<i class="nb-checkmark"></i>',
+      cancelButtonContent: '<i class="nb-close"></i>',
+    },
+    delete: {
+      deleteButtonContent: '<i class="nb-trash"></i>',
+      confirmDelete: true,
+    },
+    columns: {
+      userId: {
+        title: 'userId',
+        type: 'string',
+      },
+      firstName: {
+        title: 'First Name',
+        type: 'string',
+      },
+      lastName: {
+        title: 'Last Name',
+        type: 'string',
+      },
+      username: {
+        title: 'Username',
+        type: 'string',
+      },
+      email: {
+        title: 'E-mail',
+        type: 'string',
+      },
+      role: {
+        title: 'Role',
+        type: 'string',
+      },
+    },
+  };
+
+  private source;
+
+  constructor(private _router: Router,
+              private _usersService: UsersService) { 
+                this._usersService.getAllUsers()
+                  .subscribe(data => this.source = data)
+               }
+  
+
+  onDeleteConfirm(event): void {
+  if (window.confirm('Are you sure you want to delete?')) {
+    event.confirm.resolve();
+  } else {
+    event.confirm.reject();
+  }
+}
+
+  ngOnInit() {
+    // this._allUsers$ = this._usersService.getAllUsers();
+  }
+}

@@ -1,0 +1,75 @@
+<div class="row">
+    <div class="col-md-12">
+      <nb-card>
+          <nb-card-header>
+            User Übersicht
+          </nb-card-header>
+        
+          <nb-card-body>
+              <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">userId</th>
+                      <th scope="col">First</th>
+                      <th scope="col">Last</th>
+                      <th scope="col">Handle</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row">1</th>
+                      <td>Mark</td>
+                      <td>Otto</td>
+                      <td>@mdo</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">2</th>
+                      <td>Jacob</td>
+                      <td>Thornton</td>
+                      <td>@fat</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">3</th>
+                      <td>Larry</td>
+                      <td>the Bird</td>
+                      <td>@twitter</td>
+                    </tr>
+                  </tbody>
+                </table>
+          </nb-card-body>
+        </nb-card>
+    </div>
+  </div> 
+<!-- <div class="row">
+  <div class="col-md-12">
+    <nb-card>
+        <nb-card-header>
+          User Übersicht
+        </nb-card-header>
+      
+        <nb-card-body>
+          <ng2-smart-table [settings]="settings" [source]="source" (deleteConfirm)="onDeleteConfirm($event)">
+          </ng2-smart-table>
+        </nb-card-body>
+      </nb-card>
+  </div>
+</div>     -->
+<nb-card>
+  <nb-card-body>
+    Usermanagement Works!
+    <br><br>
+    <strong>All Users:</strong><br><br>
+    <ng-container *ngIf="_allUsers$ | async as users; else loading">
+      <div>Daten vorhanden</div><br>
+      <div *ngFor="let u of users; let i=index">
+        <p>{{ i }} {{ u.email }}</p>
+      </div>
+      <div *ngIf="!users.length">
+        <p>Es wurden noch keine Daten angelegt!</p>
+      </div>
+    </ng-container>
+    <ng-template #loading>
+      <p>Daten werden geladen....</p>
+    </ng-template> 
+  </nb-card-body>
+</nb-card>
