@@ -1,0 +1,55 @@
+<div class="row">
+  <div class="col-md-12">
+    <ng-container *ngIf="_connectionError">
+      <nb-alert status="danger">
+        Connection failed!
+      </nb-alert>
+    </ng-container>
+    <ng-container *ngIf="_sendSuccess">
+      <nb-alert status="success">
+        Successfully captured data!
+      </nb-alert>
+    </ng-container>
+    <nb-card>
+      <nb-card-header>Device and Robot Connection</nb-card-header>
+      <nb-card-body>
+        <form [formGroup]="connectCommandForm" (ngSubmit)="onSubmit()">
+          <div class="form-group row">
+            <label for="device" class="label col-sm-3 col-form-label">Available Devices</label>
+            <div class="col-sm-9">
+              <nb-select placeholder="Choose Device" formControlName="device">
+                <nb-option *ngFor="let device of devices" [value]="device.id">
+                  {{device.name}}
+                </nb-option>
+              </nb-select>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="robot" class="label col-sm-3 col-form-label">Available Robots</label>
+            <div class="col-sm-9">
+              <nb-select placeholder="Choose Robot" formControlName="robot">
+                <nb-option *ngFor="let robot of robots" [value]="robot.id">
+                  {{robot.name}}
+                </nb-option>
+              </nb-select>
+            </div>
+          </div>
+          Angular Generated Form Model : {{ connectCommandForm.value | json}}
+          <br/>
+          <br/>
+          Script Captured Model : {{ scriptModel | json}}
+          <div class="form-group row">
+            <div class="offset-sm-3 col-sm-9">
+              <button type="submit" [disabled]="!connectCommandForm.valid" nbButton status="primary">connect</button>
+            </div>
+          </div>
+        </form>
+      </nb-card-body>
+      <!-- <ng-container *ngIf="_userRoles$ | async as roles">
+        <tr *ngFor="let role of roles; let i=index">
+          <th scope="row">{{ role._id }}</th>
+        </tr>
+      </ng-container> -->
+    </nb-card>
+  </div>
+</div>

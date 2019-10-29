@@ -10,6 +10,7 @@ import { UsermanagementModule } from './admin/usermanagement/usermanagement.modu
 import { RoleGuard } from '../awccore/auth/guards/role.guard';
 import { AuthGuard } from '../awccore/auth/guards/auth.guard';
 import { RobotModule } from './content/robot/robot.module';
+import { ConnectModule } from './content/connect/connect.module';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { RobotModule } from './content/robot/robot.module';
     MiscellaneousModule,
     StarterModule,
     RobotModule,
-    UsermanagementModule
+    UsermanagementModule,
+    ConnectModule
   ],
   declarations: [
     PagesComponent,

@@ -1,4 +1,4 @@
-import { NbMenuItem } from '@nebular/theme';
+import { NbMenuItem, NbIconLibraries  } from '@nebular/theme';
 
 export const MENU_ITEMS: NbMenuItem[] = [
   {
@@ -14,6 +14,21 @@ export const MENU_ITEMS: NbMenuItem[] = [
     title: 'Robot Communication',
     icon: 'home-outline',
     link: '/pages/robot',
+  },
+  {
+    title: 'Connect',
+    icon: 'home-outline',
+    link: '/pages/connect',
+  },
+  {
+    title: 'DeviceManagement',
+    icon: 'home-outline',
+    link: '/pages/devicemanagement',
+  },
+  {
+    title: 'RobotManagement',
+    icon: 'home-outline',
+    link: '/pages/robotmanagement',
   },
   // {
   //   title: 'Auth',

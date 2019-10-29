@@ -21,6 +21,21 @@ const routes: Routes = [{
       loadChildren: () => import('./content/robot/robot.module')
         .then(m => m.RobotModule),
     },
+    {
+      path: 'connect',
+      loadChildren: () => import('./content/connect/connect.module')
+        .then(m => m.ConnectModule),
+    },
+    {
+      path: 'robotmanagement',
+      loadChildren: () => import('./content/robotmanagement/robotmanagement.module')
+        .then(m => m.RobotManagementModule),
+    },
+    {
+      path: 'devicemanagement',
+      loadChildren: () => import('./content/devicemanagement/devicemanagement.module')
+        .then(m => m.DeviceManagementModule),
+    },
     // {
     //   path: 'usermanagement',
     //   loadChildren: () => import('./admin/usermanagement/usermanagement.module')

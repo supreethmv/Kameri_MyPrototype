@@ -1,0 +1,37 @@
+<div class="row">
+    <div class="col-md-12">
+        <ng-container *ngIf="_connectionError">
+            <nb-alert status="danger">
+                Robot Creation failed!
+            </nb-alert>
+        </ng-container>
+        <ng-container *ngIf="_sendSuccess">
+            <nb-alert status="success">
+                Successfully created robot!
+            </nb-alert>
+        </ng-container>
+        <nb-card>
+            <nb-card-header>Robot Creation</nb-card-header>
+            <nb-card-body>
+                <form [formGroup]="robotManagementForm" (ngSubmit)="onSubmit()">
+                    <div class="form-group row form-control-group">
+                        <label for="prexis" class="label col-sm-3 col-form-label" id="input-prefix">Description</label>
+                        <div class="col-sm-9">
+                            <input type="text" nbInput fullWidth id="input-prefix"
+                                placeholder="Text Box for description on Robot" formControlName="robotDescription">
+                        </div>
+                    </div>
+                    Angular Generated Form Model : {{ robotManagementForm.value | json}}
+                    <br/>
+                    <br/>
+                    Script Captured Model : {{ sendData | json}}
+                    <div class="form-group row">
+                        <div class="offset-sm-3 col-sm-9">
+                            <button type="submit" [disabled]="!robotManagementForm.valid" nbButton status="primary">send</button>
+                        </div>
+                    </div>
+                </form>
+            </nb-card-body>
+        </nb-card>
+    </div>
+</div>
