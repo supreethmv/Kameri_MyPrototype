@@ -13,7 +13,7 @@ device_schema_list = DeviceSchema(many=True)
 
 
 class Device(Resource):
-    # @jwt_required
+    @jwt_required
     def get(self, uuid):
         device = DeviceModel.find_by_uuid(uuid)
 
@@ -22,7 +22,7 @@ class Device(Resource):
 
         return {"message": "No device found"}, 404
 
-    # @jwt_required
+    @jwt_required
     def put(self, uuid):
         device = DeviceModel.find_by_uuid(uuid)
 
@@ -31,7 +31,7 @@ class Device(Resource):
 
         return {"message": "No device found"}, 404
 
-    # @jwt_required
+    @jwt_required
     def delete(self, uuid):
         device = DeviceModel.find_by_uuid(uuid)
 
@@ -45,7 +45,7 @@ api.add_resource(Device, '/api/device/<uuid>')
 
 
 class DeviceList(Resource):
-    # @jwt_required
+    @jwt_required
     def get(self):
         return {"users": device_schema_list.dump(DeviceModel.find_all_devices())}
 
